@@ -42,7 +42,7 @@ void loop() {
 bool isDark()
 {
   int sensorValue = analogRead(A0);  
-  if (sensorValue == 1023)
+  if (sensorValue > 100)
   {
     return true;
   }
