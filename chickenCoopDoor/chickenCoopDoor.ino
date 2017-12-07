@@ -6,6 +6,9 @@ const int goLeftOutput = 7;
 const int goRightOutput = 8;
 const int enableMotorA = 9;
 
+bool isDoorFullyClosedState = false;
+bool isDoorFullyOpenState = false;
+
 Bounce debouncerButtonUp = Bounce();
 Bounce debouncerButtonDown = Bounce();
 
@@ -35,14 +38,16 @@ void loop() {
   
   if (isDark())
   {
-    if (!isDoorFullyClosed())
+    isDoorFullyClosed();
+    if (!isDoorFullyClosedState)
     {
       moveDoorDown();
     } else {
       motorStop();
     }
   } else {
-    if (!isDoorFullyOpen())
+    isDoorFullyOpen();
+    if (!isDoorFullyOpenState)
     {
       moveDoorUp();
     } else {
@@ -64,26 +69,28 @@ bool isDark()
   return false;
 }
 
-bool isDoorFullyClosed()
+void isDoorFullyClosed()
 {
   int value = debouncerButtonDown.read();
   
   if (value == 0) {
-    return true;
+    if (isDoorFullyClosedState == false) {
+      isDoorFullyClosedState = true;
+      isDoorFullyOpenState = false;
+    }
   }
-  
-  return false;
 }
 
-bool isDoorFullyOpen()
+void isDoorFullyOpen()
 {
   int value = debouncerButtonUp.read();
   
   if (value == 0) {
-    return true;
+    if (isDoorFullyOpenState == false) {
+      isDoorFullyOpenState = true;
+      isDoorFullyClosedState = false;
+    }
   }
-  
-  return false;
 }
 
 void motorStop()
@@ -104,4 +111,3 @@ void moveDoorDown()
   digitalWrite(goLeftOutput, LOW);
   digitalWrite(goRightOutput, HIGH);
 }
-
