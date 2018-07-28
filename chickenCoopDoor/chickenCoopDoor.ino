@@ -1,10 +1,12 @@
 #include <Bounce2.h>
 
-const int goUpButtonInput = 2;
-const int goDownButtonInput = 3;
-const int goLeftOutput = 7;
-const int goRightOutput = 8;
-const int enableMotorA = 9;
+const int goUpButtonInput = 10;
+const int goDownButtonInput = 11;
+const int enableMotorA = 2;
+const int goRightOutput = 4;
+const int goLeftOutput = 3;
+
+const int lightSensorInput = 12;
 
 bool isDoorFullyClosedState = false;
 bool isDoorFullyOpenState = false;
@@ -18,6 +20,9 @@ void setup() {
   pinMode(goLeftOutput, OUTPUT);
   pinMode(goRightOutput, OUTPUT);
 
+  pinMode(lightSensorInput, INPUT);
+  digitalWrite(lightSensorInput, LOW);
+  
   digitalWrite(goUpButtonInput, HIGH);
   digitalWrite(goDownButtonInput, HIGH);
 
@@ -60,8 +65,10 @@ void loop() {
 
 bool isDark()
 {
-  int sensorValue = analogRead(A0);  
-  if (sensorValue > 100)
+  int sensorValue = digitalRead(lightSensorInput); 
+  Serial.begin(9600);
+  Serial.println(sensorValue);
+  if (sensorValue == 1)
   {
     return true;
   }
